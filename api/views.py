@@ -30,13 +30,14 @@ def calculate_price(request, format=None):
     """
     orderbook = zadanie2.get_orderbook()
     buy = request.data.get("buy")
-
+    if type(buy) not in [str, int, float]:
+        return Response({"error": "Wrong input value type"})
     try:
         price = zadanie2.get_bitcoin_price_multiple_transaction(
             bids=orderbook["bids"], buy=buy
         )
     except ValueError:
-        return Response({"error": "Wrong input value type"})
+        return Response({"error": "Wrong input value"})
 
     if price is None:
         return Response({"error": "Cannot buy this amount of bitcoins"})

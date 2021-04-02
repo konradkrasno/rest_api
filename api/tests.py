@@ -75,6 +75,13 @@ def test_calculate_price_when_invalid(client, mocker, orderbook):
     mocker.patch("api.zadanie2.get_orderbook", return_value=orderbook)
     response = client.post("/zadanie2/", data={"buy": "invalid"}, format="json")
     assert response.status_code == 200
+    assert response.data == {"error": "Wrong input value"}
+
+
+def test_calculate_price_when_wrong_data(client, mocker, orderbook):
+    mocker.patch("api.zadanie2.get_orderbook", return_value=orderbook)
+    response = client.post("/zadanie2/", data={"buy": ["0.1234"]}, format="json")
+    assert response.status_code == 200
     assert response.data == {"error": "Wrong input value type"}
 
 
